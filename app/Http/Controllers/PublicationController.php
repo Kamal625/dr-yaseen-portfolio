@@ -87,4 +87,13 @@ class PublicationController extends Controller
         // Jab website live hogi, tab yahan asli Email sending ka code ayega.
         return redirect()->back()->with('success', 'Your message has been sent. Dr. Ghulam Yaseen will contact you shortly.');
     }
+    public function research() {
+    $publications = Publication::where('category', 'scholarly')->orderBy('created_at', 'desc')->get();
+    return view('publications', compact('publications'));
+}
+
+public function publicScholarship() {
+    $publications = Publication::where('category', 'creative')->orderBy('created_at', 'desc')->get();
+    return view('scholarship', compact('publications'));
+}
 }

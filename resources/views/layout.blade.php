@@ -53,10 +53,10 @@
 
     <!-- Navigation -->
     <nav class="bg-[#1A237E] text-white shadow-2xl py-6">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+        <div class="container mx-auto px-6 flex flex-col lg:flex-row justify-between items-center">
             
             <!-- Brand Identity -->
-            <div class="text-center md:text-left mb-6 md:mb-0">
+            <div class="text-center lg:text-left mb-6 lg:mb-0">
                 <a href="/" class="text-3xl font-bold tracking-widest uppercase font-serif-display block">
                     Dr. Ghulam Yaseen
                 </a>
@@ -65,14 +65,20 @@
                 </p>
             </div>
             
-            <!-- Menu Links -->
-            <ul class="flex flex-wrap justify-center items-center space-x-6 md:space-x-8 text-sm uppercase tracking-widest font-medium">
+            <!-- Menu Links (Updated with New Tabs) -->
+            <ul class="flex flex-wrap justify-center items-center gap-y-4 gap-x-6 md:gap-x-8 text-[11px] uppercase tracking-widest font-bold">
                 <li><a href="/" class="hover:text-[#F5F5DC] transition border-b border-transparent hover:border-[#4E0707] pb-1">Home</a></li>
-                <li><a href="{{ route('gallery.index') }}" class="hover:text-[#F5F5DC] transition border-b border-transparent hover:border-[#4E0707] pb-1">Archive</a></li>
-                <li><a href="{{ route('contact') }}" class="hover:text-[#F5F5DC] transition border-b border-transparent hover:border-[#4E0707] pb-1">Contact</a></li>
+                
+                <li><a href="{{ route('publications.research') }}" class="hover:text-[#F5F5DC] transition border-b border-transparent hover:border-[#4E0707] pb-1 text-center">Publication & Research</a></li>
+                
+                <li><a href="{{ route('public.scholarship') }}" class="hover:text-[#F5F5DC] transition border-b border-transparent hover:border-[#4E0707] pb-1 text-center">Public Scholarship</a></li>
+                
+                <li><a href="{{ route('gallery.index') }}" class="hover:text-[#F5F5DC] transition border-b border-transparent hover:border-[#4E0707] pb-1 text-center">Digital Archive & Gallery</a></li>
+                
+                <li><a href="{{ route('contact') }}" class="hover:text-[#F5F5DC] transition border-b border-transparent hover:border-[#4E0707] pb-1 text-center">Contact</a></li>
 
                 @auth
-                    <!-- Sirf Admin ko nazar ayega jab login hoga -->
+                    <!-- Admin specific links -->
                     <li class="pl-4 border-l border-white/20">
                         <a href="/admin" class="text-amber-400 font-bold hover:text-white transition">Dashboard</a>
                     </li>
@@ -94,7 +100,7 @@
         @yield('content')
     </main>
 
-    <!-- DYNAMIC FOOTER -->
+    <!-- Dynamic Footer -->
     @php $profile = \App\Models\Profile::first(); @endphp
     
     <footer class="bg-[#1A237E] text-[#F5F5DC] py-16 border-t-4 border-[#4E0707] mt-24">
@@ -110,7 +116,7 @@
 
             <!-- Follow My Work (With Icons) -->
             <div>
-                <h3 class="text-xs uppercase tracking-[0.3em] font-bold mb-8 text-white">FOLLOW MY WORK</h3>
+                <h3 class="text-xs uppercase tracking-[0.3em] font-bold mb-6 text-white">FOLLOW MY WORK</h3>
                 <div class="flex flex-wrap justify-center md:justify-start gap-4">
                     @if($profile)
                         @if($profile->google_scholar) 

@@ -9,47 +9,62 @@ use App\Models\Profile;
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes (Har koi dekh sakta hai)
+| PUBLIC ROUTES (Har koi dekh sakta hai)
 |--------------------------------------------------------------------------
 */
 
+// 1. Home Page: Sirf haliya (recent) 3-4 items dikhane ke liye
 Route::get('/', function () {
-    // Database se data uthana zaroori hai taake error na aaye
-    $publications = Publication::orderBy('created_at', 'desc')->get();
+    $publications = Publication::orderBy('created_at', 'desc')->take(4)->get();
     $profile = Profile::first(); 
-    
     return view('welcome', compact('publications', 'profile'));
 })->name('home');
 
+// 2. Publication & Research: Sirf 'scholarly' category wala kaam
+Route::get('/publications-research', [PublicationController::class, 'research'])->name('publications.research');
+
+// 3. Public Scholarship: Sirf 'creative' category wala kaam
+Route::get('/public-scholarship', [PublicationController::class, 'publicScholarship'])->name('public.scholarship');
+
+// 4. Digital Archive & Gallery: Multimedia aur events
+Route::get('/digital-archive', [GalleryController::class, 'index'])->name('gallery.index');
+
+// 5. Single Article: Mukammal article parhne ke liye
 Route::get('/read/{id}', [PublicationController::class, 'show'])->name('article.read');
-Route::get('/archive', [GalleryController::class, 'index'])->name('gallery.index');
+
+// 6. Contact Page
 Route::get('/contact', function () { return view('contact'); })->name('contact');
 Route::post('/contact/send', [PublicationController::class, 'sendContact'])->name('contact.send');
 
 
 /*
 |--------------------------------------------------------------------------
-| Admin Protected Routes (Sirf Login ke baad)
+| ADMIN PROTECTED ROUTES (Sirf Login ke baad)
 |--------------------------------------------------------------------------
 */
-// Is line ko Admin routes se pehle ya baad mein kahin bhi add kar den
+
+// Login ke baad dashboard se admin portal par bhej do
 Route::get('/dashboard', function () {
     return redirect()->route('admin.index');
 })->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // Admin Dashboard
+    // Admin Dashboard Main Page
     Route::get('/admin', [PublicationController::class, 'index'])->name('admin.index');
     
-    // Actions
+    // Articles Actions (Save & Delete)
     Route::post('/admin/store', [PublicationController::class, 'store'])->name('admin.store');
     Route::delete('/admin/publication/{id}', [PublicationController::class, 'destroy'])->name('admin.publication.destroy');
+    
+    // Gallery Actions (Save & Delete)
     Route::post('/admin/gallery/store', [GalleryController::class, 'store'])->name('admin.gallery.store');
     Route::delete('/admin/gallery/{id}', [GalleryController::class, 'destroy'])->name('admin.gallery.destroy');
+    
+    // Profile & Social Links Update
     Route::post('/admin/profile/update', [PublicationController::class, 'updateProfile'])->name('admin.profile.update');
 
-    // Breeze default profile routes
+    // Breeze default profile settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
